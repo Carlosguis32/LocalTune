@@ -1,9 +1,14 @@
-import Player from './Player';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/app-sidebar';
 
 function Menu() {
 	return (
 		<div>
-			<Player />
+			<SidebarProvider>
+				<AppSidebar />
+
+				<text>Test</text>
+			</SidebarProvider>
 		</div>
 	);
 }

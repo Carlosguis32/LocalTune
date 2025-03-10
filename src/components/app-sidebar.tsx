@@ -1,6 +1,11 @@
 import * as React from 'react';
-import { ArchiveX, Command, File, Inbox, Send, Trash2 } from 'lucide-react';
-
+import { useNavigate, useLocation } from 'react-router-dom';
+import {
+	IconHome,
+	IconPlayerPlay,
+	IconPlaylist,
+	IconSettings,
+} from '@tabler/icons-react';
 import { NavUser } from '@/components/nav-user';
 import {
 	Sidebar,
@@ -15,7 +20,6 @@ import {
 	useSidebar,
 } from '@/components/ui/sidebar';
 
-// This is sample data
 const data = {
 	user: {
 		name: 'shadcn',
@@ -24,43 +28,53 @@ const data = {
 	},
 	navMain: [
 		{
-			title: 'Inbox',
-			url: '#',
-			icon: Inbox,
+			title: 'Player',
+			url: 'player',
+			icon: IconPlayerPlay,
+			isActive: false,
+		},
+		{
+			title: 'Playlists',
+			url: 'playlists',
+			icon: IconPlaylist,
 			isActive: true,
 		},
 		{
-			title: 'Drafts',
-			url: '#',
-			icon: File,
-			isActive: false,
+			title: 'Settings',
+			url: 'settings',
+			icon: IconSettings,
+			isActive: true,
 		},
 		{
-			title: 'Sent',
-			url: '#',
-			icon: Send,
-			isActive: false,
-		},
-		{
-			title: 'Junk',
-			url: '#',
-			icon: ArchiveX,
-			isActive: false,
-		},
-		{
-			title: 'Trash',
-			url: '#',
-			icon: Trash2,
-			isActive: false,
+			title: 'Artists',
+			url: 'artists',
+			icon: IconPlaylist,
+			isActive: true,
 		},
 	],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-	// Note: I'm using state to show active item.
-	// IRL you should use the url/router.
-	const [activeItem, setActiveItem] = React.useState(data.navMain[0]);
+	const [currentPage, setCurrentPage] = React.useState<string>('Player');
 	const { setOpen } = useSidebar();
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	const getCurrentPage = React.useCallback(() => {
+		const path = location.pathname.substring(1) || 'player';
+		const navItem = data.navMain.find((item) => item.url === path);
+		return navItem ? navItem.title : 'Player';
+	}, [location.pathname]);
+
+	const handleNavigation = (item: (typeof data.navMain)[0]) => {
+		setCurrentPage(item.title);
+		setOpen(true);
+		navigate(`/${item.url}`);
+	};
+
+	React.useEffect(() => {
+		setCurrentPage(getCurrentPage());
+	}, [getCurrentPage, location]);
 
 	return (
 		<Sidebar
@@ -76,17 +90,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							asChild
 							className="md:h-8 md:p-0"
 						>
-							<a href="#">
+							<a href="/">
 								<div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-									<Command className="size-4" />
-								</div>
-								<div className="grid flex-1 text-left text-sm leading-tight">
-									<span className="truncate font-medium">
-										Acme Inc
-									</span>
-									<span className="truncate text-xs">
-										Enterprise
-									</span>
+									<IconHome className="size-4" />
 								</div>
 							</a>
 						</SidebarMenuButton>
@@ -100,13 +106,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							{data.navMain.map((item) => (
 								<SidebarMenuItem key={item.title}>
 									<SidebarMenuButton
+										onClick={() => {
+											handleNavigation(item);
+										}}
 										tooltip={{
 											children: item.title,
 											hidden: false,
 										}}
-										isActive={
-											activeItem?.title === item.title
-										}
+										isActive={currentPage === item.title}
 										className="px-2.5 md:px-2"
 									>
 										<item.icon />
