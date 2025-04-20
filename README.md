@@ -31,7 +31,7 @@ An unfinished project that aims to become a self-hosted music server to save and
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/LocalTune.git
+git clone https://github.com/Carlosguis32/LocalTune.git
 cd LocalTune
 ```
 
@@ -41,7 +41,13 @@ cd LocalTune
 pnpm install
 ```
 
-3. Start the development server:
+3. Start the backend server:
+
+```bash
+pnpm start
+```
+
+4. Start the development server:
 
 ```bash
 pnpm dev
@@ -49,16 +55,8 @@ pnpm dev
 
 ## 🎮 Usage
 
-1. Launch the application
+1. Launch the web
 2. Add your music library
 3. Enjoy your personal music collection with rich metadata support
 4. Create and manage playlists
 5. Control playback with an intuitive interface
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to open issues and submit pull requests to help improve LocalTune.
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
