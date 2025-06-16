@@ -1,7 +1,7 @@
-export function shuffleArray(audios: string[]): string[] {
+export function shuffleArray(audios: string[], startIndex: number, endIndex: number): string[] {
 	const shuffled = [...audios];
 
-	for (let i = shuffled.length - 1; i > 0; i--) {
+	for (let i = endIndex - 1; i > startIndex; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
 		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 	}
@@ -21,4 +21,13 @@ export function secondsToMinutesFormatted(value: number): string {
 	}
 
 	return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+export function convertDataStreamToImage(stream: string) {
+	const byteArray = stream.split(',').map((num) => parseInt(num.trim()));
+	const uint8Array = new Uint8Array(byteArray);
+	const blob = new Blob([uint8Array], { type: 'image/jpeg' });
+	const image = URL.createObjectURL(blob);
+
+	return image;
 }

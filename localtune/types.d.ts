@@ -1,3 +1,10 @@
+export interface AudioMetadata {
+	title: string;
+	artist: string;
+	album: string;
+	albumCoverImage: string;
+}
+
 export interface PlayerControllersProps {
 	isPlaying: boolean;
 	isInShuffleMode: boolean;

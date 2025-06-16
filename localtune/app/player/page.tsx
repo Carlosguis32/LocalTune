@@ -2,20 +2,35 @@
 
 import PlayerControllers from '@/components/player-controllers';
 import SliderComponent from '@/components/song-slider';
-import { secondsToMinutesFormatted } from '@/lib/functions';
+import { convertDataStreamToImage, secondsToMinutesFormatted } from '@/lib/functions';
 import { usePlayerContext } from '@/context/player-context';
 import { usePlayerControls } from '@/hooks/use-player-controls';
 import { usePlayer } from '@/hooks/use-player';
+import { useEffect } from 'react';
+import Image from 'next/image';
 
 export default function Player() {
-	const { audioRef, isPlaying, isInRepeatMode, isInShuffleMode, currentlyPlayingAudio, currentTime, duration } =
-		usePlayerContext();
+	const {
+		audioRef,
+		audioFoldersFilenames,
+		audioFilesFolders,
+		audioQueue,
+		isPlaying,
+		isInRepeatMode,
+		isInShuffleMode,
+		currentQueuePosition,
+		currentlyPlayingAudio,
+		currentlyPlayingAudioMetadata,
+		currentTime,
+		duration,
+		setCurrentlyPlayingAudioMetadata,
+	} = usePlayerContext();
 	const { handlePlayPause, handleNextAudio, handlePreviousAudio, handleRepeat, handleShuffle, handleSeek } =
 		usePlayerControls();
 	usePlayer();
 
 	return (
-		<div className="fixed inset-0 flex items-center justify-center">
+		<main className="fixed inset-0 flex items-center justify-center">
 			<div className="flex flex-col items-center justify-center w-full max-w-md gap-8 p-6 bg-black/90 border rounded-xl border-neutral-800/40 shadow-[0px_20px_20px_0px_rgba(0,0,0,0.8)] hover:shadow-[0px_40px_40px_0px_rgba(0,0,0,1)] transition-all duration-300">
 				<audio
 					ref={audioRef}
@@ -32,19 +47,29 @@ export default function Player() {
 					className="hidden"
 				/>
 
-				<div className="w-[400px]">
-					<img src="src\assets\AlbumImageTest.jpg" alt="Image" className="rounded-md object-cover" />
-				</div>
+				{currentlyPlayingAudioMetadata?.albumCoverImage && (
+					<img
+						src={convertDataStreamToImage(currentlyPlayingAudioMetadata?.albumCoverImage)}
+						alt="Image"
+						width={200}
+						height={200}
+						className="rounded-md object-cover"
+					/>
+				)}
 
 				<div className="w-full max-w-md text-center">
 					{currentlyPlayingAudio ? (
 						<div>
 							<p className="text-xl font-medium text-foreground truncate">
-								{currentlyPlayingAudio.replace(/\.[^/.]+$/, '')}
+								{currentlyPlayingAudioMetadata?.title}
 							</p>
 
 							<p className="text-m font-medium text-muted-foreground">
-								{currentlyPlayingAudio.replace(/\.[^/.]+$/, '')}
+								{currentlyPlayingAudioMetadata?.artist}
+							</p>
+
+							<p className="text-m font-medium text-muted-foreground">
+								{currentlyPlayingAudioMetadata?.album}
 							</p>
 						</div>
 					) : (
@@ -80,6 +105,6 @@ export default function Player() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</main>
 	);
 }

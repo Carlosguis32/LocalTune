@@ -10,6 +10,7 @@ export function usePlayer() {
 		currentQueuePosition,
 		setAudioFoldersFilenames,
 		setCurrentlyPlayingAudio,
+		setCurrentlyPlayingAudioMetadata,
 		setCurrentTime,
 		setDuration,
 	} = usePlayerContext();
@@ -35,6 +36,19 @@ export function usePlayer() {
 			};
 		}
 	}, [audioRef, setCurrentTime, setDuration]);
+
+	useEffect(() => {
+		if (audioFilesFolders[0] && audioFoldersFilenames[0]) {
+			const encodedFolder = encodeURIComponent(audioFilesFolders[0]);
+			const encodedFilename = encodeURIComponent(audioQueue[currentQueuePosition]);
+
+			fetch(`http://localhost:8571/api/audio/metadata/${encodedFolder}/${encodedFilename}`)
+				.then((response) => response.json())
+				.then((metadata) => {
+					setCurrentlyPlayingAudioMetadata(metadata);
+				});
+		}
+	}, [audioFilesFolders, audioFoldersFilenames, audioQueue, currentQueuePosition, setCurrentlyPlayingAudioMetadata]);
 
 	useEffect(() => {
 		const audioName = audioQueue[currentQueuePosition];

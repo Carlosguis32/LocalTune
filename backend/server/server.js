@@ -2,6 +2,7 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 import cors from "cors";
+import { parseFile } from "music-metadata";
 
 const app = express();
 const PORT = 8571;
@@ -23,10 +24,26 @@ app.get("/api/audio-folder/:path", (req, res) => {
 			return [".mp3", ".wav", ".ogg"].includes(extension);
 		});
 
-		console.log(files);
-
 		res.status(200).json(audioFiles);
 	});
+});
+
+app.get("/api/audio/metadata/:folder/:filename", async (req, res) => {
+	try {
+		const { folder, filename } = req.params;
+		const filePath = path.join(decodeURIComponent(folder), decodeURIComponent(filename));
+
+		const metadata = await parseFile(filePath);
+
+		res.status(200).json({
+			title: metadata.common.title,
+			artist: metadata.common.artist,
+			album: metadata.common.album,
+			albumCoverImage: metadata.common.picture[0].data.toString("base64"),
+		});
+	} catch (error) {
+		res.status(500).json({ error: `Error parsing metadata: ${error.message}` });
+	}
 });
 
 app.get("/api/audio/:path", (req, res) => {

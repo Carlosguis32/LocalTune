@@ -19,7 +19,6 @@ export function usePlayerControls() {
 	} = usePlayerContext();
 
 	function handlePlayPause() {
-		console.log(audioRef.current);
 		if (audioRef.current) {
 			if (isPlaying) {
 				audioRef.current.pause();
