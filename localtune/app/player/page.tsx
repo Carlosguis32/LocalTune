@@ -8,17 +8,8 @@ import { usePlayerControls } from '@/hooks/use-player-controls';
 import { usePlayer } from '@/hooks/use-player';
 
 export default function Player() {
-	const {
-		audioRef,
-		isPlaying,
-		isInRepeatMode,
-		isInShuffleMode,
-		currentlyPlayingAudio,
-		currentQueuePosition,
-		currentTime,
-		duration,
-		setCurrentQueuePosition,
-	} = usePlayerContext();
+	const { audioRef, isPlaying, isInRepeatMode, isInShuffleMode, currentlyPlayingAudio, currentTime, duration } =
+		usePlayerContext();
 	const { handlePlayPause, handleNextAudio, handlePreviousAudio, handleRepeat, handleShuffle, handleSeek } =
 		usePlayerControls();
 	usePlayer();
@@ -35,7 +26,7 @@ export default function Player() {
 								audioRef.current.play().catch((e) => console.error('Error playing audio:', e));
 							}
 						} else {
-							setCurrentQueuePosition(currentQueuePosition + 1);
+							handleNextAudio();
 						}
 					}}
 					className="hidden"

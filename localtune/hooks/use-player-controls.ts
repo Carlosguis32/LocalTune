@@ -32,31 +32,39 @@ export function usePlayerControls() {
 	}
 
 	function handleNextAudio() {
-		if (audioQueue && currentQueuePosition < audioQueue.length) {
-			setCurrentQueuePosition(currentQueuePosition + 1);
+		if (audioQueue && currentQueuePosition < audioQueue.length - 1) {
+			const wasPlaying = isPlaying;
 
+			if (!isInRepeatMode) {
+				setCurrentQueuePosition(currentQueuePosition + 1);
+			}
+
+			if (wasPlaying && audioRef.current) {
+				setTimeout(() => {
+					if (audioRef.current) {
+						audioRef.current.play().catch((e) => console.error('Error playing audio:', e));
+					}
+				}, 100);
+			}
+		} else {
+			setIsPlaying(false);
 			if (audioRef.current) {
-				if (isPlaying) {
-					audioRef.current.pause();
-					audioRef.current.play();
-				} else {
-					audioRef.current.play();
-				}
+				audioRef.current.pause();
 			}
 		}
 	}
 
 	function handlePreviousAudio() {
 		if (audioQueue && currentQueuePosition > 0) {
+			const wasPlaying = isPlaying;
 			setCurrentQueuePosition(currentQueuePosition - 1);
 
-			if (audioRef.current) {
-				if (isPlaying) {
-					audioRef.current.pause();
-					audioRef.current.play();
-				} else {
-					audioRef.current.play();
-				}
+			if (wasPlaying && audioRef.current) {
+				setTimeout(() => {
+					if (audioRef.current) {
+						audioRef.current.play().catch((e) => console.error('Error playing audio:', e));
+					}
+				}, 100);
 			}
 		}
 	}
