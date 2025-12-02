@@ -72,7 +72,7 @@ export function usePlayerControls() {
 		if (audioFoldersFilenames) {
 			if (!isInShuffleMode) {
 				setCurrentQueuePosition(0);
-				setAudioQueue(shuffleArray(audioFoldersFilenames));
+				setAudioQueue(shuffleArray(audioFoldersFilenames, 1, audioFoldersFilenames.length));
 			} else {
 				setCurrentQueuePosition(audioFoldersFilenames.indexOf(audioQueue[currentQueuePosition]));
 				setAudioQueue(audioFoldersFilenames);

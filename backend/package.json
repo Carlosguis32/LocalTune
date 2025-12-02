@@ -3,7 +3,9 @@
 	"main": "server.js",
 	"type": "module",
 	"scripts": {
-		"server": "node server/server.js"
+		"server": "node server/server.js",
+		"pocketbase": ".\\database\\pocketbase serve",
+		"start": "start cmd /k npm run pocketbase && npm run server"
 	},
 	"dependencies": {
 		"cors": "^2.8.5",
