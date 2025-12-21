@@ -31,3 +31,33 @@ export function convertDataStreamToImage(stream: string) {
 
 	return image;
 }
+
+import PocketBase from 'pocketbase/cjs';
+
+const pb = new PocketBase('http://localhost:8090');
+
+export async function getMusicPaths(): Promise<string[]> {
+	try {
+		const records = await pb.collection('music_paths').getFullList();
+		return records.map(record => record.path).filter(path => path);
+	} catch (error) {
+		console.error('Error fetching music paths:', error);
+		return [];
+	}
+}
+
+export async function saveMusicPath(path: string): Promise<void> {
+	try {
+		// First, clear existing paths
+		const existing = await pb.collection('music_paths').getFullList();
+		for (const record of existing) {
+			await pb.collection('music_paths').delete(record.id);
+		}
+
+		// Add new path
+		await pb.collection('music_paths').create({ path });
+	} catch (error) {
+		console.error('Error saving music path:', error);
+		throw error;
+	}
+}

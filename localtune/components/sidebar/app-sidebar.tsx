@@ -1,6 +1,6 @@
 'use client';
 
-import { Command, Home, LifeBuoy, Send, Settings } from 'lucide-react';
+import { Command, Home, LifeBuoy, PlayCircle, Send, Settings } from 'lucide-react';
 import * as React from 'react';
 
 import { NavMain } from '@/components/sidebar/nav-main';
@@ -33,6 +33,11 @@ const data = {
 			title: 'Settings',
 			url: '/settings',
 			icon: Settings,
+		},
+		{
+			title: 'Player',
+			url: '/player',
+			icon: PlayCircle,
 		},
 	],
 	navSecondary: [

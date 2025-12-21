@@ -25,7 +25,7 @@ export default function Player() {
 
 	return (
 		<main className="flex items-center justify-center">
-			<div className="flex flex-col items-center justify-center w-full max-w-md gap-8 p-6 bg-black/90 border rounded-xl border-neutral-800/40 shadow-[0px_20px_20px_0px_rgba(0,0,0,0.8)] hover:shadow-[0px_40px_40px_0px_rgba(0,0,0,1)] transition-all duration-300">
+			<div className="flex flex-col items-center justify-center w-full max-w-md gap-8 p-6 bg-black/90 border rounded-xl">
 				<audio
 					ref={audioRef}
 					onEnded={() => {
@@ -76,7 +76,7 @@ export default function Player() {
 							{secondsToMinutesFormatted(currentTime) || '0:00'}
 						</p>
 
-						<div className="flex-grow">
+						<div className="flex w-full">
 							<SliderComponent currentTime={currentTime} duration={duration} onSeek={handleSeek} />
 						</div>
 

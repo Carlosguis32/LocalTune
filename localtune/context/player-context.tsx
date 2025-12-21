@@ -1,7 +1,8 @@
 'use client';
 
 import { AudioMetadata } from '@/types';
-import { createContext, ReactNode, RefObject, useContext, useRef, useState } from 'react';
+import { createContext, ReactNode, RefObject, useContext, useEffect, useRef, useState } from 'react';
+import { getMusicPaths } from '@/lib/functions';
 
 interface PlayerContextProvider {
 	audioRef: RefObject<HTMLAudioElement | null>;
@@ -37,7 +38,7 @@ const PlayerContextProvider = createContext<PlayerContextProvider | undefined>(u
 
 export function PlayerContext({ children }: PlayerContextProps) {
 	const audioRef = useRef<HTMLAudioElement>(null);
-	const [audioFilesFolders, setAudioFilesFolders] = useState(['F:/Server - 3/03 - Música']);
+	const [audioFilesFolders, setAudioFilesFolders] = useState<string[]>([]);
 	const [audioFoldersFilenames, setAudioFoldersFilenames] = useState<string[]>([]);
 	const [isInRepeatMode, setIsInRepeatMode] = useState(false);
 	const [isInShuffleMode, setIsInShuffleMode] = useState(true);
@@ -50,6 +51,18 @@ export function PlayerContext({ children }: PlayerContextProps) {
 	const [currentQueuePosition, setCurrentQueuePosition] = useState(0);
 	const [currentTime, setCurrentTime] = useState(0);
 	const [duration, setDuration] = useState(0);
+
+	useEffect(() => {
+		(async () => {
+			try {
+				const paths = await getMusicPaths();
+				console.log('Context - loaded paths:', paths);
+				setAudioFilesFolders(paths);
+			} catch (error) {
+				console.error('Error loading music paths:', error);
+			}
+		})();
+	}, []);
 
 	return (
 		<PlayerContextProvider.Provider

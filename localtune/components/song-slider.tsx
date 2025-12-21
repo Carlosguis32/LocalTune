@@ -1,12 +1,8 @@
+import { SliderComponentProps } from '@/types';
 import { useState } from 'react';
-import { SliderComponentProps } from '../Types';
 import { Slider } from './ui/slider';
 
-function SliderComponent({
-	currentTime,
-	duration,
-	onSeek,
-}: SliderComponentProps) {
+function SliderComponent({ currentTime, duration, onSeek }: SliderComponentProps) {
 	const [isDragging, setIsDragging] = useState(false);
 	const [dragValue, setDragValue] = useState(currentTime);
 
