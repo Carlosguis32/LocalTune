@@ -2,7 +2,7 @@ import { SliderComponentProps } from '@/types';
 import { useState } from 'react';
 import { Slider } from './ui/slider';
 
-function SliderComponent({ currentTime, duration, onSeek }: SliderComponentProps) {
+export function SliderComponent({ currentTime, duration, onSeek }: SliderComponentProps) {
 	const [isDragging, setIsDragging] = useState(false);
 	const [dragValue, setDragValue] = useState(currentTime);
 
@@ -24,5 +24,3 @@ function SliderComponent({ currentTime, duration, onSeek }: SliderComponentProps
 		/>
 	);
 }
-
-export default SliderComponent;

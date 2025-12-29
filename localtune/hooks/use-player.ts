@@ -1,6 +1,12 @@
 import { usePlayerContext } from '@/context/player-context';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
+const API_BASE_URL = 'http://localhost:8571/api';
+
+/**
+ * Custom hook for managing audio player functionality.
+ * Handles fetching audio files, setting up audio events, and updating metadata.
+ */
 export function usePlayer() {
 	const {
 		audioFilesFolders,
@@ -16,34 +22,29 @@ export function usePlayer() {
 		setDuration,
 	} = usePlayerContext();
 
+	// Update currentTime and duration every 1 second for efficiency
 	useEffect(() => {
 		if (audioRef.current) {
-			const audio = audioRef.current;
+			const interval = setInterval(() => {
+				const audio = audioRef.current;
 
-			const handleTimeUpdate = () => {
-				setCurrentTime(audio.currentTime);
-			};
+				if (audio) {
+					setCurrentTime(audio.currentTime);
+					setDuration(audio.duration);
+				}
+			}, 1000);
 
-			const handleDurationChange = () => {
-				setDuration(audio.duration);
-			};
-
-			audio.addEventListener('timeupdate', handleTimeUpdate);
-			audio.addEventListener('durationchange', handleDurationChange);
-
-			return () => {
-				audio.removeEventListener('timeupdate', handleTimeUpdate);
-				audio.removeEventListener('durationchange', handleDurationChange);
-			};
+			return () => clearInterval(interval);
 		}
 	}, [audioRef, setCurrentTime, setDuration]);
 
+	// Fetch and set metadata for the currently playing audio
 	useEffect(() => {
 		if (audioFilesFolders[0] && audioFoldersFilenames[0]) {
 			const encodedFolder = encodeURIComponent(audioFilesFolders[0]);
 			const encodedFilename = encodeURIComponent(audioQueue[currentQueuePosition]);
 
-			fetch(`http://localhost:8571/api/audio/metadata/${encodedFolder}/${encodedFilename}`)
+			fetch(`${API_BASE_URL}/audio/metadata/${encodedFolder}/${encodedFilename}`)
 				.then((response) => response.json())
 				.then((metadata) => {
 					setCurrentlyPlayingAudioMetadata(metadata);
@@ -51,49 +52,31 @@ export function usePlayer() {
 		}
 	}, [audioFilesFolders, audioFoldersFilenames, audioQueue, currentQueuePosition, setCurrentlyPlayingAudioMetadata]);
 
+	// Set the audio source and currently playing audio when queue position changes
 	useEffect(() => {
 		const audioName = audioQueue[currentQueuePosition];
 
 		if (audioFilesFolders[0] && audioName) {
-			const fullPath = `${audioFilesFolders[0]}\\${audioName}`;
-
 			if (audioRef.current) {
-				audioRef.current.src = `http://localhost:8571/api/audio/${encodeURIComponent(fullPath)}`;
+				audioRef.current.src = `${API_BASE_URL}/audio/file/${encodeURIComponent(audioFilesFolders[0])}/${encodeURIComponent(audioName)}`;
 				setCurrentlyPlayingAudio(audioName);
 			}
 		}
-	}, [
-		audioFilesFolders,
-		audioQueue,
-		audioRef,
-		currentQueuePosition,
-		setCurrentlyPlayingAudio,
-	]);
+	}, [audioFilesFolders, audioQueue, audioRef, currentQueuePosition, setCurrentlyPlayingAudio]);
 
-	useEffect(() => {
-		console.log('use-player useEffect triggered, audioFilesFolders:', audioFilesFolders);
-		if (audioFilesFolders.length > 0 && audioFilesFolders[0]) {
-			console.log('Calling fetchAudioFiles');
-			fetchAudioFiles();
-		}
-	}, [audioFilesFolders]);
-
-	async function fetchAudioFiles() {
+	/**
+	 * Fetches the list of audio files from the configured folder and populates the queue.
+	 * Clears the queue if no folder is configured.
+	 */
+	const fetchAudioFiles = useCallback(async () => {
 		try {
-			console.log('fetchAudioFiles called with audioFilesFolders:', audioFilesFolders);
-
 			if (!audioFilesFolders[0]) {
-				console.warn('No music path configured. Please set a music path in settings.');
 				setAudioFoldersFilenames([]);
 				setAudioQueue([]);
 				return;
 			}
 
-			console.log('Fetching from path:', audioFilesFolders[0]);
-
-			const response = await fetch(
-				`http://localhost:8571/api/audio-folder/${encodeURIComponent(audioFilesFolders[0])}`
-			);
+			const response = await fetch(`${API_BASE_URL}/audio/folder/${encodeURIComponent(audioFilesFolders[0])}`);
 
 			if (!response.ok) {
 				const errorText = await response.text();
@@ -101,17 +84,18 @@ export function usePlayer() {
 			}
 
 			const data = await response.json();
-			console.log('Fetched data:', data.length, 'files');
-
 			setAudioFoldersFilenames(data);
-			setAudioQueue(data); // Populate the queue with all songs
-			console.log('Queue populated with', data.length, 'songs');
+			setAudioQueue(data);
 		} catch (error) {
 			console.error('Error fetching audio files:', error);
 			setAudioFoldersFilenames([]);
 			setAudioQueue([]);
 		}
-	}
+	}, [audioFilesFolders, setAudioFoldersFilenames, setAudioQueue]);
 
-	return { fetchAudioFiles };
+	useEffect(() => {
+		if (audioFilesFolders.length > 0 && audioFilesFolders[0]) {
+			fetchAudioFiles();
+		}
+	}, [audioFilesFolders, fetchAudioFiles]);
 }
