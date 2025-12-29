@@ -1,8 +1,8 @@
-# 🎵 LocalTune
+# 🎵 Melira
 
 An unfinished project that aims to become a self-hosted music server to save and display your songs and artists, with support for metadata searching. Create your personal music sanctuary with an elegant and intuitive interface.
 
-![LocalTune Interface](./src/assets/AppImage.png)
+![Melira Interface](./src/assets/AppImage.png)
 
 ## 🌟 Features
 
@@ -31,8 +31,8 @@ An unfinished project that aims to become a self-hosted music server to save and
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/Carlosguis32/LocalTune.git
-cd LocalTune
+git clone https://github.com/Carlosguis32/Melira.git
+cd Melira
 ```
 
 2. Install dependencies:

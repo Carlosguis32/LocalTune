@@ -3,17 +3,21 @@
 	"main": "server.js",
 	"type": "module",
 	"scripts": {
-		"server": "node server/server.js",
+		"server": "tsx server/server.ts",
 		"pocketbase": ".\\database\\pocketbase serve",
 		"start": "start cmd /k npm run pocketbase && npm run server"
 	},
 	"dependencies": {
 		"cors": "^2.8.5",
+		"dotenv": "^17.2.3",
 		"express": "^5.1.0",
-		"music-metadata": "^11.3.0"
+		"music-metadata": "^11.3.0",
+		"node-id3": "^0.2.9",
+		"pocketbase": "^0.26.5"
 	},
 	"devDependencies": {
 		"@types/cors": "^2.8.19",
-		"@types/express": "^5.0.6"
+		"@types/express": "^5.0.6",
+		"tsx": "^4.21.0"
 	}
 }
