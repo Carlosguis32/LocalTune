@@ -5,6 +5,7 @@ import { convertDataStreamToImage, secondsToMinutesFormatted } from '@/lib/funct
 import Image from 'next/image';
 import PlayerControllers from '../player-controllers';
 import { SliderComponent } from '../song-slider';
+import { P } from '../ui/typography';
 
 export function VerticalFullPlayer() {
 	const {
@@ -53,17 +54,17 @@ export function VerticalFullPlayer() {
 				<div className="w-full max-w-md text-center">
 					{currentlyPlayingAudio ? (
 						<div>
-							<p className="text-xl font-medium text-foreground truncate">
+							<P className="text-xl font-medium text-foreground truncate">
 								{currentlyPlayingAudioMetadata?.title}
-							</p>
+							</P>
 
-							<p className="text-m font-medium text-muted-foreground">
+							<P className="text-m font-medium text-muted-foreground">
 								{currentlyPlayingAudioMetadata?.artist}
-							</p>
+							</P>
 
-							<p className="text-m font-medium text-muted-foreground">
+							<P className="text-m font-medium text-muted-foreground">
 								{currentlyPlayingAudioMetadata?.album}
-							</p>
+							</P>
 						</div>
 					) : (
 						<p className="h-7" />

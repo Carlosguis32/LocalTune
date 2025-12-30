@@ -1,8 +1,8 @@
 'use client';
 
+import { getMusicPaths } from '@/lib/api/musicPath';
 import { AudioMetadata } from '@/types';
 import { createContext, ReactNode, RefObject, useContext, useEffect, useRef, useState } from 'react';
-import { getMusicPaths } from '@/lib/functions';
 
 interface PlayerContextProvider {
 	audioRef: RefObject<HTMLAudioElement | null>;

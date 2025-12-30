@@ -1,7 +1,6 @@
 import { usePlayerContext } from '@/context/player-context';
+import { API_BASE_URL } from '@/lib/constants';
 import { useCallback, useEffect } from 'react';
-
-const API_BASE_URL = 'http://localhost:8571/api';
 
 /**
  * Custom hook for managing audio player functionality.
@@ -58,7 +57,9 @@ export function usePlayer() {
 
 		if (audioFilesFolders[0] && audioName) {
 			if (audioRef.current) {
-				audioRef.current.src = `${API_BASE_URL}/audio/file/${encodeURIComponent(audioFilesFolders[0])}/${encodeURIComponent(audioName)}`;
+				audioRef.current.src = `${API_BASE_URL}/audio/file/${encodeURIComponent(
+					audioFilesFolders[0]
+				)}/${encodeURIComponent(audioName)}`;
 				setCurrentlyPlayingAudio(audioName);
 			}
 		}

@@ -1,8 +1,10 @@
 export interface AudioMetadata {
+	id: string;
 	title: string;
 	artist: string;
 	album: string;
 	albumCoverImage: string;
+	platformIds: Record<string, string>;
 }
 
 export interface PlayerControllersProps {
