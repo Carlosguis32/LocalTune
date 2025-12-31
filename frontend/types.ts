@@ -1,25 +1,20 @@
-export interface AudioMetadata {
-	id: string;
-	title: string;
-	artist: string;
-	album: string;
-	albumCoverImage: string;
-	platformIds: Record<string, string>;
-}
+import { AudioFileRecord } from '@/database-types';
+import { RefObject } from 'react';
 
 export interface PlayerControllersProps {
 	isPlaying: boolean;
 	isInShuffleMode: boolean;
-	isInRepeatMode: boolean;
-	handlePlayPause: () => void;
-	handleShuffle: () => void;
-	handleRepeat: () => void;
-	handleNextAudio: () => void;
-	handlePreviousAudio: () => void;
+	repeatMode: 'off' | 'all' | 'one';
+	audioRef: RefObject<HTMLAudioElement | null>;
 }
 
 export interface SliderComponentProps {
 	currentTime: number;
 	duration: number;
 	onSeek: (value: number) => void;
+}
+
+export interface AudioElement {
+	data: AudioFileRecord;
+	ref: RefObject<HTMLAudioElement>;
 }

@@ -3,7 +3,8 @@
 import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { getMusicPaths, saveMusicPath } from '@/lib/api/musicPath';
+import { usePlayerUtils } from '@/hooks/player/use-player-utils';
+import { getAudioPaths, saveAudioPath } from '@/lib/api/audioPath';
 import { useEffect, useState } from 'react';
 
 export default function Settings() {
@@ -11,11 +12,12 @@ export default function Settings() {
 	const [newPath, setNewPath] = useState('');
 	const [isLoading, setIsLoading] = useState(true);
 	const [isSaving, setIsSaving] = useState(false);
+	const { setNewAudioQueue } = usePlayerUtils();
 
 	useEffect(() => {
 		async function fetchMusicPaths() {
 			try {
-				const paths = await getMusicPaths();
+				const paths = await getAudioPaths();
 				setMusicPaths(paths);
 			} catch (error) {
 				console.error('Error loading music paths:', error);
@@ -33,9 +35,9 @@ export default function Settings() {
 		setIsSaving(true);
 
 		try {
-			await saveMusicPath(newPath.trim());
+			await saveAudioPath(newPath.trim());
 			setNewPath('');
-			const paths = await getMusicPaths();
+			const paths = await getAudioPaths();
 			setMusicPaths(paths);
 		} catch (error) {
 			console.error('Error saving music path:', error);
@@ -90,6 +92,8 @@ export default function Settings() {
 						</div>
 					</Field>
 				</FieldGroup>
+
+				<Button onClick={() => setNewAudioQueue('krj95ctlc6j9vy4')}>Refresh queue</Button>
 			</FieldSet>
 		</main>
 	);

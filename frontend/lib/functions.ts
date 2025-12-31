@@ -1,7 +1,9 @@
-export function shuffleArray(audios: string[], startIndex: number, endIndex: number): string[] {
-	const shuffled = [...audios];
+import { AudioElement } from '@/types';
 
-	for (let i = endIndex - 1; i > startIndex; i--) {
+export function shuffleAudioQueue(queue: AudioElement[]): AudioElement[] {
+	const shuffled = [...queue];
+
+	for (let i = 0; i < queue.length; i++) {
 		const j = Math.floor(Math.random() * (i + 1));
 		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 	}

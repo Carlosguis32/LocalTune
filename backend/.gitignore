@@ -41,11 +41,19 @@ yarn-error.log*
 next-env.d.ts
 
 # pocketbase
-/database/pb_data/data.db
-/database/pb_data/data.db-shm
-/database/pb_data/data.db-wal
-/database/pb_data/logs.db
-/database/pb_data/logs.db-shm
-/database/pb_data/logs.db-wal
+
+# Ignorar todos los archivos y carpetas generados por PocketBase excepto types.d.ts
+/database/pb_data/*
+!/database/pb_data/types.d.ts
+
+# Ignorar ejecutable de PocketBase
+/database/pocketbase.exe
+
+# Ignorar backups y storage
 /database/pb_data/backups/
 /database/pb_data/storage/
+
+# Ignorar archivos temporales y de base de datos
+/database/pb_data/*.db
+/database/pb_data/*.db-shm
+/database/pb_data/*.db-wal
