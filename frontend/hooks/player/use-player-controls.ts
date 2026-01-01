@@ -13,6 +13,7 @@ export function usePlayerControls(audioRef: RefObject<HTMLAudioElement | null>) 
 		setRepeatMode,
 		setIsInShuffleMode,
 		setIsPlaying,
+		setCurrentTime,
 		setVolume,
 	} = usePlayerContext();
 
@@ -86,12 +87,14 @@ export function usePlayerControls(audioRef: RefObject<HTMLAudioElement | null>) 
 			}
 		} else {
 			handleNextAudio();
+			setIsPlaying(true);
 		}
 	}
 
 	function handleSliderSeek(value: number) {
 		if (audioRef?.current) {
 			audioRef.current.currentTime = value;
+			setCurrentTime(value);
 		}
 	}
 

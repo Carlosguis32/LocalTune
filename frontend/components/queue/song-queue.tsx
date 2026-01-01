@@ -3,7 +3,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { usePlayerContext } from '@/context/player/player-context';
 import { cn } from '@/lib/utils';
 import { AudioElement } from '@/types';
-import { Music, X } from 'lucide-react';
+import { ListMusic, Music, X } from 'lucide-react';
 
 interface SongQueueProps {
 	isOpen: boolean;
@@ -32,12 +32,17 @@ export function SongQueue({ isOpen, onClose }: SongQueueProps) {
 		}
 	};
 
-	if (!isOpen) return null;
-
 	return (
-		<div className="fixed right-0 top-0 h-full w-80 bg-background border-l border-border z-50 flex flex-col">
+		<div
+			className={`pt-16 h-[calc(100vh-4rem)] bg-background border-l border-border flex flex-col transition-all duration-300 ease-in-out overflow-hidden ${
+				isOpen ? 'w-80' : 'w-0'
+			}`}
+		>
 			<div className="flex items-center justify-between p-4 border-b border-border">
-				<h2 className="text-lg font-semibold">Queue</h2>
+				<h2 className="text-lg font-semibold flex items-center gap-2">
+					<ListMusic />
+					Queue
+				</h2>
 				<Button variant="ghost" size="icon" onClick={onClose}>
 					<X className="w-4 h-4" />
 				</Button>

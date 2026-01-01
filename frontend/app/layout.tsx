@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { Montserrat } from 'next/font/google';
-import { ClientLayout } from './client-layout';
+import { Rethink_Sans } from 'next/font/google';
+import { ClientLayout } from '../components/layout/client-layout';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 	description: 'A self-hosted server for your music, focused on organizing your music',
 };
 
-const montserrat = Montserrat({
+const rethinkSans = Rethink_Sans({
 	subsets: ['latin'],
 });
 
@@ -18,8 +18,8 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className={montserrat.className}>
-			<body className="antialiased">
+		<html lang="en" className={rethinkSans.className}>
+			<body className="antialiased overflow-hidden">
 				<ClientLayout>{children}</ClientLayout>
 			</body>
 		</html>

@@ -2,10 +2,6 @@ import { usePlayerContext } from '@/context/player/player-context';
 import { API_BASE_URL } from '@/lib/constants';
 import { RefObject, useEffect } from 'react';
 
-/**
- * Custom hook for managing audio player functionality.
- * Handles fetching audio files, setting up audio events, and updating metadata.
- */
 export function usePlayer(audioRef: RefObject<HTMLAudioElement | null>) {
 	const { audioQueue, currentQueuePosition, isPlaying, volume } = usePlayerContext();
 
@@ -19,7 +15,6 @@ export function usePlayer(audioRef: RefObject<HTMLAudioElement | null>) {
 			const currentAudio = audioQueue[currentQueuePosition];
 			if (!currentAudio.data?.path) return;
 
-			// Evita recargar si el path es el mismo
 			const currentSrc = audioRef.current.getAttribute('data-path');
 			if (currentSrc === currentAudio.data.path) return;
 
@@ -27,14 +22,16 @@ export function usePlayer(audioRef: RefObject<HTMLAudioElement | null>) {
 			if (response.ok) {
 				const audioBlob = await response.blob();
 				const audioUrl = URL.createObjectURL(audioBlob);
+
 				audioRef.current.setAttribute('src', audioUrl);
 				audioRef.current.setAttribute('data-path', currentAudio.data.path);
-				// Auto-play if was playing
+
 				if (isPlaying) {
 					audioRef.current.play().catch((e) => console.error('Error auto-playing audio:', e));
 				}
 			}
 		}
+
 		fetchAudio();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [audioQueue, currentQueuePosition, audioRef]);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Slider } from './ui/slider';
+import { Slider } from '../ui/slider';
 
 interface VolumeSliderProps {
 	volume: number;

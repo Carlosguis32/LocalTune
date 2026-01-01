@@ -1,14 +1,18 @@
 import { AudioElement } from '@/types';
 
-export function shuffleAudioQueue(queue: AudioElement[]): AudioElement[] {
-	const shuffled = [...queue];
+export function shuffleArray<T>(array: T[]): T[] {
+	const shuffled = [...array];
 
-	for (let i = 0; i < queue.length; i++) {
+	for (let i = 0; i < array.length; i++) {
 		const j = Math.floor(Math.random() * (i + 1));
 		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
 	}
 
 	return shuffled;
+}
+
+export function shuffleAudioQueue(queue: AudioElement[]): AudioElement[] {
+	return shuffleArray(queue);
 }
 
 export function secondsToMinutesFormatted(value: number): string {

@@ -24,7 +24,7 @@ export function registerAudioRoutes(app: Express) {
 		}
 	});
 
-	// Returns a list of audio files in the specified folder path
+	// Get all audio files in a folder
 	app.get("/api/v1/audio/folder/:folder", (req, res) => {
 		if (!req.params.folder) {
 			return res.status(400).send("The path of the folder could not be identified");
@@ -44,7 +44,7 @@ export function registerAudioRoutes(app: Express) {
 		});
 	});
 
-	// Returns metadata for a specific audio file
+	// Get all metadata of an audio file
 	app.get("/api/v1/audio/metadata/:path", async (req, res) => {
 		try {
 			const metadata = await parseFile(req.params.path);
@@ -63,7 +63,7 @@ export function registerAudioRoutes(app: Express) {
 		}
 	});
 
-	// Serves the audio file at the specified path
+	// Serve an audio file at the specified path
 	app.get("/api/v1/audio/file/:path", (req, res) => {
 		res.sendFile(req.params.path);
 	});
@@ -93,53 +93,12 @@ export function registerAudioRoutes(app: Express) {
 			const { path } = req.params;
 			const { metadata } = req.body;
 
-			// Write platform IDs to file metadata
 			const success = await writePlatformIdsToFile(path, metadata.platformIds);
 
 			if (success) {
-				// Also update database if record exists
-				try {
-					// Find the audio file record by path
-					const audioFileRecord = await pb.collection("audioFile").getFirstListItem(`path="${path}"`);
-
-					// Update metadata record
-					if (audioFileRecord.metadata) {
-						await pb.collection("audioMetadata").update(audioFileRecord.metadata, {
-							filename: pathModule.basename(path, pathModule.extname(path)),
-							artist: metadata.artist,
-							album: metadata.album,
-							title: metadata.title,
-						});
-					}
-
-					// Update or create provider ID record
-					if (metadata.platformIds.spotify) {
-						if (audioFileRecord.providerId) {
-							await pb.collection("audioProviderId").update(audioFileRecord.providerId, {
-								spotifyId: metadata.platformIds.spotify,
-							});
-						} else {
-							const providerIdRecord = await pb.collection("audioProviderId").create({
-								spotifyId: metadata.platformIds.spotify,
-							});
-							await pb.collection("audioFile").update(audioFileRecord.id, {
-								providerId: providerIdRecord.id,
-							});
-						}
-					} else if (audioFileRecord.providerId) {
-						// Remove provider ID if no longer exists
-						await pb.collection("audioProviderId").delete(audioFileRecord.providerId);
-						await pb.collection("audioFile").update(audioFileRecord.id, {
-							providerId: null,
-						});
-					}
-				} catch (dbError) {
-					console.warn("Could not update database:", dbError);
-				}
-
-				res.status(200).json({ message: "Metadata updated correctly" });
+				res.status(200).json({ message: "Platform IDs written successfully" });
 			} else {
-				res.status(500).json({ error: "Failed to save platform IDs to file" });
+				res.status(500).json({ error: "Failed to write platform IDs" });
 			}
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
@@ -152,7 +111,6 @@ export function registerAudioRoutes(app: Express) {
 		try {
 			const folder = req.params.path;
 			const files = fs.readdirSync(folder);
-
 			const audioFiles = files.filter((file) => {
 				const extension = path.extname(file).toLowerCase();
 				return SUPPORTED_AUDIO_FILE_EXTENSIONS.includes(extension);
@@ -163,19 +121,11 @@ export function registerAudioRoutes(app: Express) {
 			for (const fileName of audioFiles) {
 				try {
 					const filePath = path.join(folder, fileName);
-
 					const platformIds = await readPlatformIdsFromFile(filePath);
-
-					let providerIdRecord = null;
-					if (platformIds.spotify) {
-						providerIdRecord = await pb.collection("audioProviderId").create({
-							spotifyId: platformIds.spotify,
-						});
-					}
 
 					const record = await pb.collection("audioFile").create({
 						path: filePath,
-						providerId: providerIdRecord?.id,
+						spotifyId: platformIds.spotify,
 					});
 
 					savedRecords.push(record);

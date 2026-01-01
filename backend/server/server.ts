@@ -6,6 +6,7 @@ import { authenticateAsSuperuserPocketBase } from "./database";
 import { registerAudioRoutes } from "./routes/audio";
 import { registerPlaylistRoutes } from "./routes/playlist";
 import { registerSettingsRoutes } from "./routes/settings";
+import { registerSpotifyRoutes } from "./routes/spotify";
 
 export const app = express();
 
@@ -19,6 +20,7 @@ authenticateAsSuperuserPocketBase();
 registerAudioRoutes(app);
 registerPlaylistRoutes(app);
 registerSettingsRoutes(app);
+registerSpotifyRoutes(app);
 
 app.listen(PORT, () => {
 	console.log(`Server running on http://localhost:${PORT}`);

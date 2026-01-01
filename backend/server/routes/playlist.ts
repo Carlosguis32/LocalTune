@@ -4,6 +4,20 @@ import { pb } from "../database";
 export function registerPlaylistRoutes(app: Express) {
 	//// GET REQUESTS ////
 
+	// Get all playlists
+	app.get("/api/v1/playlists", async (req, res) => {
+		try {
+			const playlists = await pb.collection("playlist").getFullList({
+				sort: "created",
+			});
+
+			res.status(200).json(playlists);
+		} catch (error) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			res.status(500).json({ error: `Error fetching playlists: ${errorMessage}` });
+		}
+	});
+
 	// Get all audio files in a playlist
 	app.get("/api/v1/playlist/:id", async (req, res) => {
 		try {

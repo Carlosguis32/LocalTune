@@ -11,33 +11,39 @@ export function PlayerControllers({ isPlaying, isInShuffleMode, repeatMode, audi
 		<div className="flex items-center justify-center gap-2">
 			<Button
 				onClick={handleShuffle}
-				variant={isInShuffleMode ? 'outline' : 'default'}
+				variant={isInShuffleMode ? 'ghost' : 'default'}
 				size="icon"
-				className="w-10 h-10 rounded-full"
+				className="w-8 h-8 rounded-full"
 			>
-				<Shuffle className="w-5 h-5" />
+				<Shuffle className="text-foreground" strokeWidth={3} />
 			</Button>
 
-			<Button onClick={handlePreviousAudio} variant="default" size="icon" className="w-10 h-10 rounded-full">
-				<SkipBack className="w-5 h-5" />
+			<Button onClick={handlePreviousAudio} variant="ghost" size="icon" className="w-8 h-8 rounded-full">
+				<SkipBack className="text-foreground fill-foreground" strokeWidth={3} />
 			</Button>
 
-			<Button onClick={handlePlayPause} variant="default" size="icon" className="w-12 h-12 rounded-full">
-				{isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
+			<Button onClick={handlePlayPause} variant="default" size="icon" className="w-10 h-10 rounded-full">
+				{isPlaying ? (
+					<Pause className="text-foreground fill-foreground" />
+				) : (
+					<Play className="w-6 h-6 text-foreground fill-foreground" strokeWidth={3} />
+				)}
 			</Button>
 
-			<Button onClick={handleNextAudio} variant="default" size="icon" className="w-10 h-10 rounded-full">
-				<SkipForward className="w-5 h-5" />
+			<Button onClick={handleNextAudio} variant="ghost" size="icon" className="w-8 h-8 rounded-full">
+				<SkipForward className="text-foreground fill-foreground" strokeWidth={3} />
 			</Button>
 
 			<Button
 				onClick={handleRepeat}
-				variant={repeatMode === 'all' || repeatMode === 'one' ? 'outline' : 'default'}
+				variant={repeatMode === 'all' || repeatMode === 'one' ? 'default' : 'ghost'}
 				size="icon"
-				className="w-10 h-10 rounded-full"
+				className="w-8 h-8 rounded-full"
 			>
-				{(repeatMode === 'all' || repeatMode === 'off') && <Repeat className="w-5 h-5" />}
-				{repeatMode === 'one' && <Repeat1 className="w-5 h-5" />}
+				{(repeatMode === 'all' || repeatMode === 'off') && (
+					<Repeat className="text-foreground" strokeWidth={3} />
+				)}
+				{repeatMode === 'one' && <Repeat1 className="text-foreground" strokeWidth={3} />}
 			</Button>
 		</div>
 	);
