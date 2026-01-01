@@ -16,7 +16,7 @@ export function registerAudioRoutes(app: Express) {
 	app.get("/api/v1/audio/paths", async (_, res) => {
 		try {
 			const records = await pb.collection("audioPath").getFullList();
-			const paths = records.map((record) => record.path).filter((path) => path);
+			const paths = records.map((record) => record.path?.trim()).filter((path) => path);
 			res.json(paths);
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
@@ -79,11 +79,38 @@ export function registerAudioRoutes(app: Express) {
 				return res.status(400).json({ error: "Path is required" });
 			}
 
-			await pb.collection("audioPath").create({ path });
+			await pb.collection("audioPath").create({ path: path.trim() });
 			res.status(201).json({ message: "Audio path saved" });
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
 			res.status(500).json({ error: `Error saving music path: ${errorMessage}` });
+		}
+	});
+
+	//// DELETE REQUESTS ////
+
+	// Delete an audio path
+	app.delete("/api/v1/audio/path", async (req, res) => {
+		try {
+			const { path } = req.body;
+
+			if (!path) {
+				return res.status(400).json({ error: "Path is required" });
+			}
+
+			const trimmedPath = path.trim();
+			const records = await pb.collection("audioPath").getFullList();
+			const recordToDelete = records.find((record) => record.path?.trim() === trimmedPath);
+
+			if (!recordToDelete) {
+				return res.status(404).json({ error: "Path not found" });
+			}
+
+			await pb.collection("audioPath").delete(recordToDelete.id);
+			res.status(200).json({ message: "Audio path deleted" });
+		} catch (error) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			res.status(500).json({ error: `Error deleting music path: ${errorMessage}` });
 		}
 	});
 

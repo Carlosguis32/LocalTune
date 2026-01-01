@@ -25,7 +25,10 @@ export function registerPlaylistRoutes(app: Express) {
 				expand: "audioFiles",
 			});
 
-			res.status(200).json(playlist.expand?.audioFiles || []);
+			res.status(200).json({
+				playlist,
+				audioFiles: playlist.expand?.audioFiles || [],
+			});
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : String(error);
 			res.status(500).json({ error: `Error fetching audio files: ${errorMessage}` });

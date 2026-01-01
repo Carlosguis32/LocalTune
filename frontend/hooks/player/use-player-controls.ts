@@ -35,8 +35,10 @@ export function usePlayerControls(audioRef: RefObject<HTMLAudioElement | null>) 
 		if (!audioQueue) return;
 		if (audioQueue.length - 1 > currentQueuePosition) {
 			setCurrentQueuePosition(currentQueuePosition + 1);
+			setIsPlaying(true);
 		} else if (repeatMode === 'all') {
 			setCurrentQueuePosition(0);
+			setIsPlaying(true);
 		}
 	}
 
@@ -44,8 +46,10 @@ export function usePlayerControls(audioRef: RefObject<HTMLAudioElement | null>) 
 		if (!audioQueue) return;
 		if (currentQueuePosition > 0) {
 			setCurrentQueuePosition(currentQueuePosition - 1);
+			setIsPlaying(true);
 		} else if (repeatMode === 'all') {
 			setCurrentQueuePosition(audioQueue.length - 1);
+			setIsPlaying(true);
 		}
 	}
 

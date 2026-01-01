@@ -80,8 +80,8 @@ export function PlayerContext({ children }: { children: ReactNode }) {
 	const [currentTime, setCurrentTime] = useState<number>(0);
 	const [duration, setDuration] = useState<number>(0);
 	const [volume, setVolumeState] = useState<number>(() => loadNumber('volume', 1));
-	const [isQueueOpen, setIsQueueOpen] = useState<boolean>(false);
-	const [isPlaylistSidebarOpen, setIsPlaylistSidebarOpen] = useState<boolean>(false);
+	const [isQueueOpen, setIsQueueOpenState] = useState<boolean>(() => loadBoolean('isQueueOpen', false));
+	const [isPlaylistSidebarOpen, setIsPlaylistSidebarOpenState] = useState<boolean>(() => loadBoolean('isPlaylistSidebarOpen', false));
 
 	// Setters that also update localStorage
 	function setAudioQueue(queue: AudioElement[]) {
@@ -119,6 +119,20 @@ export function PlayerContext({ children }: { children: ReactNode }) {
 		}
 	}
 
+	function setIsQueueOpen(value: boolean) {
+		setIsQueueOpenState(value);
+		if (typeof window !== 'undefined') {
+			localStorage.setItem('isQueueOpen', JSON.stringify(value));
+		}
+	}
+
+	function setIsPlaylistSidebarOpen(value: boolean) {
+		setIsPlaylistSidebarOpenState(value);
+		if (typeof window !== 'undefined') {
+			localStorage.setItem('isPlaylistSidebarOpen', JSON.stringify(value));
+		}
+	}
+
 	// Restore state from localStorage on mount
 	useEffect(() => {
 		if (typeof window === 'undefined') return;
@@ -128,6 +142,8 @@ export function PlayerContext({ children }: { children: ReactNode }) {
 		setRepeatModeState(loadRepeatMode('repeatMode', 'off'));
 		setIsInShuffleModeState(loadBoolean('isInShuffleMode', true));
 		setVolumeState(loadNumber('volume', 1));
+		setIsQueueOpenState(loadBoolean('isQueueOpen', false));
+		setIsPlaylistSidebarOpenState(loadBoolean('isPlaylistSidebarOpen', false));
 	}, []);
 
 	return (
@@ -151,8 +167,8 @@ export function PlayerContext({ children }: { children: ReactNode }) {
 				setCurrentTime,
 				setDuration,
 				setVolume,
-				setIsQueueOpen,
-				setIsPlaylistSidebarOpen,
+				setIsQueueOpen: setIsQueueOpen,
+				setIsPlaylistSidebarOpen: setIsPlaylistSidebarOpen,
 			}}
 		>
 			{children}

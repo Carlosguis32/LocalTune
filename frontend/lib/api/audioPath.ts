@@ -33,3 +33,22 @@ export async function saveAudioPath(path: string): Promise<void> {
 		throw error;
 	}
 }
+
+export async function deleteAudioPath(path: string): Promise<void> {
+	try {
+		const response = await fetch(`${API_BASE_URL}/v1/audio/path`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ path }),
+		});
+
+		if (!response.ok) {
+			throw new Error(`Failed to delete audio path: ${response.statusText}`);
+		}
+	} catch (error) {
+		console.error('Error deleting music path:', error);
+		throw error;
+	}
+}

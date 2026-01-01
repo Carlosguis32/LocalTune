@@ -1,5 +1,5 @@
 import { usePlayerContext } from '@/context/player/player-context';
-import { getAllAudiosInAPlaylist } from '@/lib/api/playlist';
+import { getPlaylistById } from '@/lib/api/playlist';
 import { AudioElement } from '@/types';
 import { RefObject } from 'react';
 
@@ -8,16 +8,16 @@ export function usePlayerUtils() {
 
 	async function setNewAudioQueue(playlistId: string) {
 		try {
-			const audioFiles = await getAllAudiosInAPlaylist(playlistId);
+			const playlist = await getPlaylistById(playlistId);
 
-			if (!audioFiles) {
+			if (!playlist || !playlist.audioFiles) {
 				setAudioQueue([]);
 				return;
 			}
 
-			const audioElements: AudioElement[] = audioFiles.map((audioFile) => ({
+			const audioElements: AudioElement[] = playlist.audioFiles.map((audioFile) => ({
 				data: audioFile,
-				ref: { current: null } as unknown as RefObject<HTMLAudioElement>,
+				ref: { current: null } as unknown as RefObject<HTMLAudioElement | null>,
 			}));
 
 			setAudioQueue(audioElements);

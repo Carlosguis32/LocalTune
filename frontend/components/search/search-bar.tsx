@@ -7,7 +7,7 @@ interface SearchBarProps {
 	onSearch?: (query: string) => void;
 }
 
-export function SearchBar({ placeholder = 'Escucha algo...', onSearch }: SearchBarProps) {
+export function SearchBar({ placeholder = 'Play something...', onSearch }: SearchBarProps) {
 	const [query, setQuery] = useState('');
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

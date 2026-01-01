@@ -12,6 +12,7 @@ export interface AudioFileRecord extends CommonRecord {
 	title?: string;
 	artist?: string;
 	album?: string;
+	duration?: number;
 }
 
 export interface AudioPathRecord extends CommonRecord {

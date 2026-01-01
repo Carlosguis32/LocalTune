@@ -55,9 +55,9 @@ export function HorizontalFullPlayer() {
 	}, [setCurrentTime, setDuration, setIsPlaying]);
 
 	return (
-		<main className="fixed bottom-0 left-0 w-full bg-black border-t border-border z-50">
+		<main className="fixed bottom-0 left-0 w-full h-24 bg-black border-t border-border z-50">
 			<audio ref={audioRef} onEnded={handleSongEnd} className="hidden" />
-			<div className="flex flex-row items-center justify-between w-full mx-auto px-6 py-3 gap-4">
+			<div className="flex flex-row items-center justify-between w-full h-full mx-auto px-6 py-3 gap-4">
 				<div className="flex items-center min-w-0 gap-4 w-1/3">
 					<Image
 						src={'/placeholder.webp'}

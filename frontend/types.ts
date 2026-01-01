@@ -27,5 +27,5 @@ export interface SliderComponentProps {
 
 export interface AudioElement {
 	data: AudioFileRecord;
-	ref: RefObject<HTMLAudioElement>;
+	ref: RefObject<HTMLAudioElement | null>;
 }

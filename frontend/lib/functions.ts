@@ -29,6 +29,19 @@ export function secondsToMinutesFormatted(value: number): string {
 	return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
+export function formatDuration(seconds: number): string {
+	if (!seconds) return '0 min';
+
+	const hours = Math.floor(seconds / 3600);
+	const minutes = Math.floor((seconds % 3600) / 60);
+
+	if (hours > 0) {
+		return `${hours} hr ${minutes} min`;
+	}
+
+	return `${minutes} min`;
+}
+
 export function convertDataStreamToImage(stream: string) {
 	const byteArray = stream.split(',').map((num) => parseInt(num.trim()));
 	const uint8Array = new Uint8Array(byteArray);

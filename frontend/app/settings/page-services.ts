@@ -1,11 +1,10 @@
-import { getAudioPaths, saveAudioPath } from '@/lib/api/audioPath';
+import { getAudioPaths, saveAudioPath, deleteAudioPath } from '@/lib/api/audioPath';
 import { getSpotifySettings, saveSpotifySettings } from '@/lib/api/spotify';
 import { useEffect, useState } from 'react';
 
 export function useMusicPaths() {
 	const [musicPaths, setMusicPaths] = useState<string[]>([]);
 	const [newPath, setNewPath] = useState('');
-	const [isLoading, setIsLoading] = useState(true);
 	const [isSaving, setIsSaving] = useState(false);
 
 	useEffect(() => {
@@ -15,8 +14,6 @@ export function useMusicPaths() {
 				setMusicPaths(paths);
 			} catch (error) {
 				console.error('Error loading music paths:', error);
-			} finally {
-				setIsLoading(false);
 			}
 		}
 		fetchMusicPaths();
@@ -26,7 +23,7 @@ export function useMusicPaths() {
 		if (!newPath.trim()) return;
 		setIsSaving(true);
 		try {
-			await saveAudioPath(newPath.trim());
+			await saveAudioPath(newPath);
 			setNewPath('');
 			const paths = await getAudioPaths();
 			setMusicPaths(paths);
@@ -38,13 +35,27 @@ export function useMusicPaths() {
 		}
 	}
 
+	async function handleRemovePath(path: string) {
+		setIsSaving(true);
+		try {
+			await deleteAudioPath(path.trim());
+			const paths = await getAudioPaths();
+			setMusicPaths(paths);
+		} catch (error) {
+			console.error('Error removing music path:', error);
+			alert('Error removing music path. Please try again.');
+		} finally {
+			setIsSaving(false);
+		}
+	}
+
 	return {
 		musicPaths,
 		newPath,
 		setNewPath,
-		isLoading,
 		isSaving,
 		handleAddPath,
+		handleRemovePath,
 		setMusicPaths,
 	};
 }
@@ -54,7 +65,6 @@ export function useSpotifySettingsService() {
 		clientId: '',
 		clientSecret: '',
 	});
-	const [isSpotifyLoading, setIsSpotifyLoading] = useState(true);
 	const [isSpotifySaving, setIsSpotifySaving] = useState(false);
 
 	useEffect(() => {
@@ -64,8 +74,6 @@ export function useSpotifySettingsService() {
 				setSpotifySettings(data);
 			} catch (error) {
 				console.error('Error loading Spotify settings:', error);
-			} finally {
-				setIsSpotifyLoading(false);
 			}
 		}
 		fetchSpotifySettings();
@@ -87,7 +95,6 @@ export function useSpotifySettingsService() {
 	return {
 		spotifySettings,
 		setSpotifySettings,
-		isSpotifyLoading,
 		isSpotifySaving,
 		handleSaveSpotifySettings,
 	};
