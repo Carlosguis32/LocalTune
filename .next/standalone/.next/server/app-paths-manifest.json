@@ -1,0 +1,11 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/auth/spotify/callback/page": "app/auth/spotify/callback/page.js",
+  "/auth/spotify/login/page": "app/auth/spotify/login/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js",
+  "/playlist/[slug]/page": "app/playlist/[slug]/page.js",
+  "/playlist/page": "app/playlist/page.js",
+  "/settings/page": "app/settings/page.js"
+}

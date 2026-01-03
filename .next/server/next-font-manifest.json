@@ -1,0 +1,28 @@
+{
+  "app": {
+    "[project]/app/_not-found/page": [
+      "static/media/0dc02305a3505331-s.p.36b9681c.woff2"
+    ],
+    "[project]/app/auth/spotify/callback/page": [
+      "static/media/0dc02305a3505331-s.p.36b9681c.woff2"
+    ],
+    "[project]/app/auth/spotify/login/page": [
+      "static/media/0dc02305a3505331-s.p.36b9681c.woff2"
+    ],
+    "[project]/app/page": [
+      "static/media/0dc02305a3505331-s.p.36b9681c.woff2"
+    ],
+    "[project]/app/playlist/[slug]/page": [
+      "static/media/0dc02305a3505331-s.p.36b9681c.woff2"
+    ],
+    "[project]/app/playlist/page": [
+      "static/media/0dc02305a3505331-s.p.36b9681c.woff2"
+    ],
+    "[project]/app/settings/page": [
+      "static/media/0dc02305a3505331-s.p.36b9681c.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}

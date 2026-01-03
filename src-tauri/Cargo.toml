@@ -1,0 +1,50 @@
+[package]
+name = "melira"
+version = "1.0.0"
+description = "A self-hosted music server to save and display your songs and artists, with support for metadata searching."
+authors = ["Carlos Pastor"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "melira_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+# Core de Tauri - versión 2.x no necesita features específicas para FS
+tauri = { version = "2", features = ["protocol-asset"] }
+tauri-plugin-opener = "2"
+
+# Serialización/Deserialización - convierte structs de Rust a JSON y viceversa
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Cliente HTTP - para hacer requests a Spotify API (como fetch/axios)
+reqwest = { version = "0.12", features = ["json"] }
+
+# Base de datos SQLite
+rusqlite = { version = "0.32", features = ["bundled"] }
+
+# Lectura/escritura de metadata de archivos de audio
+id3 = "1.13"           # Específico para MP3 (equivalente a node-id3)
+lofty = "0.21"         # Múltiples formatos de audio (equivalente a music-metadata)
+
+# Runtime asíncrono - permite ejecutar código async/await en Rust
+tokio = { version = "1", features = ["full"] }
+
+# Codificación Base64 - necesario para autenticación con Spotify
+base64 = "0.22"
+
+# Manejo de fechas y timestamps
+chrono = "0.4"
+
+# Utilidades para sistema de archivos
+walkdir = "2"          # Para recorrer directorios recursivamente
+

@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../app/page.tsx"],"sourcesContent":["export const dynamic = 'force-dynamic';\n\nexport default function Home() {\n\treturn <main>Melira Home Page</main>;\n}\n"],"names":[],"mappings":"qVAEe,SAAS,IACvB,MAAO,CAAA,EAAA,EAAA,GAAA,EAAC,OAAA,UAAK,oBACd,kCAJuB"}
